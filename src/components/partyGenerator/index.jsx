@@ -1,6 +1,7 @@
 // src/components/PartyGenerator/index.jsx
 
 import { useState } from 'react';
+
 import {
   Container,
   Typography,
@@ -10,12 +11,11 @@ import {
   RadioGroup,
   Select,
   MenuItem,
-  Checkbox,
-  ListItemText,
   Button,
   Box,
   List,
   ListItem,
+  Chip,
 } from '@mui/material';
 import charactersData from '../../assets/characters.json';
 
@@ -26,6 +26,8 @@ function PartyGenerator() {
   const [partyName, setPartyName] = useState('');
   const [teamType, setTeamType] = useState('normal');
   const [selectedAttribute, setSelectedAttribute] = useState('');
+  const [selectedSpecialty, setSelectedSpecialty] = useState('');
+  const [selectedAttributes, setSelectedAttributes] = useState([]);
   const [selectedSpecialties, setSelectedSpecialties] = useState([]);
   const [generatedParties, setGeneratedParties] = useState([]);
 
@@ -36,19 +38,36 @@ function PartyGenerator() {
   const handleTeamTypeChange = event => {
     setTeamType(event.target.value);
     if (event.target.value === 'disorder') {
-      setSelectedAttribute('');
+      setSelectedAttributes([]);
     }
   };
 
   const handleAttributeChange = event => {
-    setSelectedAttribute(event.target.value);
+    const attribute = event.target.value;
+    setSelectedAttribute(attribute);
+    if (selectedAttributes.length < 3) {
+      setSelectedAttributes([...selectedAttributes, attribute]);
+    }
   };
 
   const handleSpecialtyChange = event => {
-    const value = event.target.value;
-    if (value.length <= 3) {
-      setSelectedSpecialties(value);
+    const specialty = event.target.value;
+    setSelectedSpecialty(specialty);
+    if (selectedSpecialties.length < 3) {
+      setSelectedSpecialties([...selectedSpecialties, specialty]);
     }
+  };
+
+  const handleRemoveAttribute = attributeToRemove => {
+    setSelectedAttributes(
+      selectedAttributes.filter(attr => attr !== attributeToRemove)
+    );
+  };
+
+  const handleRemoveSpecialty = specialtyToRemove => {
+    setSelectedSpecialties(
+      selectedSpecialties.filter(spec => spec !== specialtyToRemove)
+    );
   };
 
   const isPartyUnique = (party, existingParties) => {
@@ -73,8 +92,8 @@ function PartyGenerator() {
       }
       if (
         teamType === 'mono' &&
-        selectedAttribute &&
-        char.Attribute !== selectedAttribute
+        selectedAttributes.length > 0 &&
+        !selectedAttributes.includes(char.Attribute)
       ) {
         return false;
       }
@@ -105,8 +124,8 @@ function PartyGenerator() {
             char => !party.some(c => c.Attribute === char.Attribute)
           );
         } else if (teamType === 'mono') {
-          selectedIndex = remainingCharacters.findIndex(
-            char => char.Attribute === selectedAttribute
+          selectedIndex = remainingCharacters.findIndex(char =>
+            selectedAttributes.includes(char.Attribute)
           );
         } else if (teamType === 'compromised') {
           const attributeCounts = party.reduce((counts, char) => {
@@ -164,7 +183,7 @@ function PartyGenerator() {
     console.log('Generating party:', {
       partyName,
       teamType,
-      selectedAttribute,
+      selectedAttributes,
       selectedSpecialties,
     });
 
@@ -226,34 +245,40 @@ function PartyGenerator() {
             ))}
           </Select>
         )}
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+          {selectedAttributes.map((attr, index) => (
+            <Chip
+              key={index}
+              label={attr}
+              onDelete={() => handleRemoveAttribute(attr)}
+            />
+          ))}
+        </Box>
         <Select
           fullWidth
-          multiple
-          value={selectedSpecialties}
+          value={selectedSpecialty}
           onChange={handleSpecialtyChange}
-          renderValue={selected =>
-            selected.length ? selected.join(', ') : 'Select Specialties'
-          }
           displayEmpty
           sx={{ mb: 2 }}
         >
-          <MenuItem disabled value=''>
-            <em>Select up to 3 Specialties</em>
+          <MenuItem value=''>
+            <em>Select a Specialty</em>
           </MenuItem>
           {specialties.map(specialty => (
-            <MenuItem
-              key={specialty}
-              value={specialty}
-              disabled={
-                selectedSpecialties.length >= 3 &&
-                !selectedSpecialties.includes(specialty)
-              }
-            >
-              <Checkbox checked={selectedSpecialties.indexOf(specialty) > -1} />
-              <ListItemText primary={specialty} />
+            <MenuItem key={specialty} value={specialty}>
+              {specialty}
             </MenuItem>
           ))}
         </Select>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+          {selectedSpecialties.map((spec, index) => (
+            <Chip
+              key={index}
+              label={spec}
+              onDelete={() => handleRemoveSpecialty(spec)}
+            />
+          ))}
+        </Box>
         <Button
           variant='contained'
           color='primary'
