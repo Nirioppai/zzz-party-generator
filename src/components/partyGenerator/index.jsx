@@ -1,194 +1,159 @@
-// src/components/PartyGenerator/index.jsx
-
-import { useState } from 'react';
-
+import { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
   TextField,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Select,
-  MenuItem,
   Button,
   Box,
-  List,
-  ListItem,
   Chip,
 } from '@mui/material';
-import charactersData from '../../assets/characters.json';
 
-const attributes = [...new Set(charactersData.map(char => char.Attribute))];
-const specialties = [...new Set(charactersData.map(char => char.Specialty))];
+import characters from '../../assets/characters.json';
+
+const attributes = ['Fire', 'Electric', 'Ice', 'Physical', 'Ether', 'Autofill'];
+const specialties = [
+  'Attack',
+  'Support',
+  'Stun',
+  'Defense',
+  'Anomaly',
+  'Autofill',
+];
 
 function PartyGenerator() {
   const [partyName, setPartyName] = useState('');
-  const [teamType, setTeamType] = useState('normal');
-  const [selectedAttribute, setSelectedAttribute] = useState('');
-  const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [selectedAttributes, setSelectedAttributes] = useState([]);
   const [selectedSpecialties, setSelectedSpecialties] = useState([]);
-  const [generatedParties, setGeneratedParties] = useState([]);
+  const [generatedTeams, setGeneratedTeams] = useState([]);
+
+  useEffect(() => {
+    console.log('generatedTeams updated:', generatedTeams);
+  }, [generatedTeams]);
 
   const handlePartyNameChange = event => {
     setPartyName(event.target.value);
   };
 
-  const handleTeamTypeChange = event => {
-    setTeamType(event.target.value);
-    if (event.target.value === 'disorder') {
-      setSelectedAttributes([]);
-    }
-  };
-
-  const handleAttributeChange = event => {
-    const attribute = event.target.value;
-    setSelectedAttribute(attribute);
+  const handleAttributeClick = attribute => {
     if (selectedAttributes.length < 3) {
       setSelectedAttributes([...selectedAttributes, attribute]);
     }
   };
 
-  const handleSpecialtyChange = event => {
-    const specialty = event.target.value;
-    setSelectedSpecialty(specialty);
+  const handleSpecialtyClick = specialty => {
     if (selectedSpecialties.length < 3) {
       setSelectedSpecialties([...selectedSpecialties, specialty]);
     }
   };
 
-  const handleRemoveAttribute = attributeToRemove => {
-    setSelectedAttributes(
-      selectedAttributes.filter(attr => attr !== attributeToRemove)
-    );
-  };
-
-  const handleRemoveSpecialty = specialtyToRemove => {
-    setSelectedSpecialties(
-      selectedSpecialties.filter(spec => spec !== specialtyToRemove)
-    );
-  };
-
-  const isPartyUnique = (party, existingParties) => {
-    return !existingParties.some(existingParty =>
-      existingParty.members.every(member =>
-        party.members.some(newMember => newMember.Agent === member.Agent)
-      )
-    );
-  };
-
-  const resetState = () => {
-    setGeneratedParties([]);
+  const resetOptions = () => {
+    setSelectedAttributes([]);
+    setSelectedSpecialties([]);
+    setGeneratedTeams([]);
   };
 
   const generateParty = () => {
-    let eligibleCharacters = [...charactersData].filter(char => {
-      if (
-        selectedSpecialties.length > 0 &&
-        !selectedSpecialties.includes(char.Specialty)
-      ) {
-        return false;
-      }
-      if (
-        teamType === 'mono' &&
-        selectedAttributes.length > 0 &&
-        !selectedAttributes.includes(char.Attribute)
-      ) {
-        return false;
-      }
-      return true;
-    });
+    let filteredCharacters = characters;
 
-    const parties = [];
-
-    while (parties.length < 10 && eligibleCharacters.length >= 3) {
-      let party = [];
-      let remainingCharacters = [...eligibleCharacters];
-
-      while (party.length < 3 && remainingCharacters.length > 0) {
-        remainingCharacters.sort((a, b) => {
-          if (a.Tier !== b.Tier) return a.Tier - b.Tier;
-          const aHasSynergy = party.some(
-            c => c.Faction === a.Faction || c.Attribute === a.Attribute
-          );
-          const bHasSynergy = party.some(
-            c => c.Faction === b.Faction || c.Attribute === b.Attribute
-          );
-          return bHasSynergy - aHasSynergy;
-        });
-
-        let selectedIndex = -1;
-        if (teamType === 'disorder') {
-          selectedIndex = remainingCharacters.findIndex(
-            char => !party.some(c => c.Attribute === char.Attribute)
-          );
-        } else if (teamType === 'mono') {
-          selectedIndex = remainingCharacters.findIndex(char =>
-            selectedAttributes.includes(char.Attribute)
-          );
-        } else if (teamType === 'compromised') {
-          const attributeCounts = party.reduce((counts, char) => {
-            counts[char.Attribute] = (counts[char.Attribute] || 0) + 1;
-            return counts;
-          }, {});
-
-          if (party.length < 2) {
-            selectedIndex = 0;
-          } else {
-            const targetAttribute = Object.entries(attributeCounts).find(
-              ([_, count]) => count === 2
-            )?.[0];
-            if (targetAttribute) {
-              selectedIndex = remainingCharacters.findIndex(
-                char => char.Attribute !== targetAttribute
-              );
-            } else {
-              selectedIndex = remainingCharacters.findIndex(
-                char => attributeCounts[char.Attribute]
-              );
-            }
-          }
-        } else {
-          selectedIndex = 0;
-        }
-
-        if (selectedIndex !== -1) {
-          party.push(remainingCharacters[selectedIndex]);
-          remainingCharacters.splice(selectedIndex, 1);
-        } else {
-          break;
-        }
-      }
-
-      if (party.length === 3) {
-        const score = party.reduce((sum, char) => sum + (3 - char.Tier), 0);
-        const newParty = { members: party, score };
-
-        if (isPartyUnique(newParty, parties)) {
-          parties.push(newParty);
-        }
-      }
-
-      eligibleCharacters = eligibleCharacters.filter(
-        char => !party.some(member => member.Agent === char.Agent)
+    // Filter by attributes
+    if (selectedAttributes.length > 0) {
+      filteredCharacters = filteredCharacters.filter(
+        char =>
+          selectedAttributes.includes('Autofill') ||
+          selectedAttributes.includes(char.Attribute)
       );
     }
 
-    parties.sort((a, b) => b.score - a.score);
-    setGeneratedParties(parties);
+    // Filter by specialties
+    if (selectedSpecialties.length > 0) {
+      filteredCharacters = filteredCharacters.filter(
+        char =>
+          selectedSpecialties.includes('Autofill') ||
+          selectedSpecialties.includes(char.Specialty)
+      );
+    }
+
+    // If we don't have enough characters, return empty array
+    if (filteredCharacters.length < 3) {
+      return [];
+    }
+
+    // Generate all possible combinations of 3 characters
+    const combinations = getCombinations(filteredCharacters, 3);
+
+    // Score each combination
+    const scoredCombinations = combinations.map(combo => ({
+      team: combo,
+      score: scoreTeam(combo),
+    }));
+
+    // Sort by score (descending) and remove duplicates
+    const uniqueTeams = removeDuplicates(
+      scoredCombinations.sort((a, b) => b.score - a.score)
+    );
+
+    console.log('Unique teams generated:', uniqueTeams);
+    return uniqueTeams;
+  };
+
+  const getCombinations = (array, size) => {
+    const result = [];
+
+    function backtrack(start, current) {
+      if (current.length === size) {
+        result.push([...current]);
+        return;
+      }
+
+      for (let i = start; i < array.length; i++) {
+        current.push(array[i]);
+        backtrack(i + 1, current);
+        current.pop();
+      }
+    }
+
+    backtrack(0, []);
+    return result;
+  };
+
+  const scoreTeam = team => {
+    let score = 0;
+
+    // Score based on tiers
+    score += team.reduce((sum, char) => sum + (3 - char.Tier), 0);
+
+    // Bonus for same faction
+    const factions = team.map(char => char.Faction);
+    if (new Set(factions).size < 3) score += 2;
+    if (new Set(factions).size === 1) score += 3;
+
+    // Bonus for same attribute
+    const attributes = team.map(char => char.Attribute);
+    if (new Set(attributes).size < 3) score += 2;
+    if (new Set(attributes).size === 1) score += 3;
+
+    return score;
+  };
+
+  const removeDuplicates = teams => {
+    const seen = new Set();
+    return teams.filter(item => {
+      const key = item.team
+        .map(char => char.Agent)
+        .sort()
+        .join(',');
+      return seen.has(key) ? false : seen.add(key);
+    });
   };
 
   const handleGenerateParty = () => {
-    console.log('Generating party:', {
-      partyName,
-      teamType,
-      selectedAttributes,
-      selectedSpecialties,
-    });
+    const teams = generateParty();
+    setGeneratedTeams(teams);
+    console.log('Generated teams:', teams);
 
-    resetState();
-    generateParty();
+    setPartyName('');
+    setSelectedAttributes([]);
+    setSelectedSpecialties([]);
   };
 
   return (
@@ -205,109 +170,112 @@ function PartyGenerator() {
           margin='normal'
           sx={{ mb: 2 }}
         />
-        <RadioGroup
-          row
-          value={teamType}
-          onChange={handleTeamTypeChange}
-          sx={{ mb: 2 }}
-        >
-          <FormControlLabel
-            value='disorder'
-            control={<Radio />}
-            label='Disorder Team (3 Different Attributes)'
-          />
-          <FormControlLabel
-            value='mono'
-            control={<Radio />}
-            label='Mono Attribute Team (3 Same Attributes)'
-          />
-          <FormControlLabel
-            value='compromised'
-            control={<Radio />}
-            label='Compromised Attribute Team (2 Same Attributes)'
-          />
-        </RadioGroup>
-        {teamType !== 'disorder' && (
-          <Select
-            fullWidth
-            value={selectedAttribute}
-            onChange={handleAttributeChange}
-            displayEmpty
-            sx={{ mb: 2 }}
-          >
-            <MenuItem value=''>
-              <em>Select an Attribute</em>
-            </MenuItem>
-            {attributes.map(attribute => (
-              <MenuItem key={attribute} value={attribute}>
-                {attribute}
-              </MenuItem>
-            ))}
-          </Select>
-        )}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-          {selectedAttributes.map((attr, index) => (
-            <Chip
-              key={index}
-              label={attr}
-              onDelete={() => handleRemoveAttribute(attr)}
-            />
-          ))}
-        </Box>
-        <Select
-          fullWidth
-          value={selectedSpecialty}
-          onChange={handleSpecialtyChange}
-          displayEmpty
-          sx={{ mb: 2 }}
-        >
-          <MenuItem value=''>
-            <em>Select a Specialty</em>
-          </MenuItem>
-          {specialties.map(specialty => (
-            <MenuItem key={specialty} value={specialty}>
-              {specialty}
-            </MenuItem>
-          ))}
-        </Select>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
-          {selectedSpecialties.map((spec, index) => (
-            <Chip
-              key={index}
-              label={spec}
-              onDelete={() => handleRemoveSpecialty(spec)}
-            />
-          ))}
-        </Box>
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={handleGenerateParty}
-          sx={{ mt: 2, mb: 4 }}
-        >
-          Generate Party
-        </Button>
 
-        {generatedParties.length > 0 && (
-          <Box>
-            <Typography variant='h5' gutterBottom>
-              Generated Parties
+        <Typography variant='h6' gutterBottom>
+          Attributes
+        </Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+          {attributes.map(attribute => (
+            <Button
+              key={attribute}
+              variant='outlined'
+              onClick={() => handleAttributeClick(attribute)}
+              disabled={selectedAttributes.length >= 3}
+            >
+              {attribute}
+            </Button>
+          ))}
+        </Box>
+
+        <Typography variant='h6' gutterBottom>
+          Specialties
+        </Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+          {specialties.map(specialty => (
+            <Button
+              key={specialty}
+              variant='outlined'
+              onClick={() => handleSpecialtyClick(specialty)}
+              disabled={selectedSpecialties.length >= 3}
+            >
+              {specialty}
+            </Button>
+          ))}
+        </Box>
+
+        {selectedAttributes.length !== 0 && (
+          <Box sx={{ mb: 2 }}>
+            <Typography variant='h6' gutterBottom>
+              Selected Attributes:
             </Typography>
-            <List>
-              {generatedParties.map((party, index) => (
-                <ListItem key={index}>
-                  <Typography>
-                    Rank {index + 1} - Score: {party.score.toFixed(2)} -
-                    {party.members
-                      .map(
-                        char =>
-                          ` ${char.Agent} (${char.Attribute}, ${char.Specialty})`
-                      )
-                      .join(', ')}
-                  </Typography>
-                </ListItem>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {selectedAttributes.map((attribute, index) => (
+                <Chip
+                  key={`${attribute}-${index}`}
+                  label={attribute}
+                  color='primary'
+                />
               ))}
-            </List>
+            </Box>
+          </Box>
+        )}
+
+        {selectedSpecialties.length !== 0 && (
+          <Box sx={{ mb: 2 }}>
+            <Typography variant='h6' gutterBottom>
+              Selected Specialties:
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {selectedSpecialties.map((specialty, index) => (
+                <Chip
+                  key={`${specialty}-${index}`}
+                  label={specialty}
+                  color='secondary'
+                />
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        <Box sx={{ mt: 2 }}>
+          <Button variant='outlined' onClick={resetOptions} sx={{ mr: 2 }}>
+            Reset Options
+          </Button>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={handleGenerateParty}
+          >
+            Generate Party
+          </Button>
+        </Box>
+
+        {generatedTeams.length > 0 && (
+          <Box sx={{ mt: 4 }}>
+            <Typography variant='h5' gutterBottom>
+              Generated Teams:
+            </Typography>
+            {generatedTeams.map((teamData, index) => (
+              <Box
+                key={index}
+                sx={{
+                  mb: 3,
+                  p: 2,
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                }}
+              >
+                <Typography variant='h6'>
+                  Team {index + 1} (Score: {teamData.score})
+                </Typography>
+                {teamData.team.map((char, charIndex) => (
+                  <Typography key={charIndex} variant='body1'>
+                    {char.Agent} - {char.Attribute} - {char.Specialty} -{' '}
+                    {char.Faction} - Tier {char.Tier}
+                  </Typography>
+                ))}
+              </Box>
+            ))}
           </Box>
         )}
       </Box>

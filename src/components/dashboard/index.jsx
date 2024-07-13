@@ -16,6 +16,8 @@ import {
 import PartyGenerator from '../partyGenerator';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
+import { doSignOut } from '../../firebase/auth';
 
 const StyledToolbar = styled(Toolbar)({
   display: 'flex',
@@ -26,6 +28,7 @@ const NavItems = ['Home', 'Profile', 'Settings', 'Logout'];
 
 function Dashboard() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = event => {
     setAnchorElNav(event.currentTarget);
@@ -33,6 +36,24 @@ function Dashboard() {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleNavItemClick = item => {
+    handleCloseNavMenu();
+    if (item === 'Logout') {
+      handleLogout();
+    }
+    // Handle other nav items as needed
+  };
+
+  const handleLogout = async () => {
+    try {
+      await doSignOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      // Optionally, show an error message to the user
+    }
   };
 
   return (
@@ -80,7 +101,7 @@ function Dashboard() {
                 }}
               >
                 {NavItems.map(item => (
-                  <MenuItem key={item} onClick={handleCloseNavMenu}>
+                  <MenuItem key={item} onClick={() => handleNavItemClick(item)}>
                     <Typography textAlign='center'>{item}</Typography>
                   </MenuItem>
                 ))}
@@ -99,7 +120,7 @@ function Dashboard() {
               {NavItems.map(item => (
                 <Button
                   key={item}
-                  onClick={handleCloseNavMenu}
+                  onClick={() => handleNavItemClick(item)}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
                   {item}
