@@ -1,0 +1,114 @@
+[
+  {
+    "Agent": "Ellen",
+    "Attribute": "Ice",
+    "Specialty": "Attack",
+    "Faction": "Victoria Housekeeping",
+    "Tier": 0
+  },
+  {
+    "Agent": "Grace",
+    "Attribute": "Electric",
+    "Specialty": "Anomaly",
+    "Faction": "Belobog Heavy Industries",
+    "Tier": 0.5
+  },
+  {
+    "Agent": "Soldier 11",
+    "Attribute": "Fire",
+    "Specialty": "Attack",
+    "Faction": "Obol Squad",
+    "Tier": 1
+  },
+  {
+    "Agent": "Nekomata",
+    "Attribute": "Physical",
+    "Specialty": "Attack",
+    "Faction": "Cunning Hares",
+    "Tier": 1
+  },
+  {
+    "Agent": "Lycaon",
+    "Attribute": "Ice",
+    "Specialty": "Stun",
+    "Faction": "Victoria Housekeeping",
+    "Tier": 0
+  },
+  {
+    "Agent": "Koleda",
+    "Attribute": "Fire",
+    "Specialty": "Stun",
+    "Faction": "Belobog Heavy Industries",
+    "Tier": 1
+  },
+  {
+    "Agent": "Rina",
+    "Attribute": "Electric",
+    "Specialty": "Support",
+    "Faction": "Victoria Housekeeping",
+    "Tier": 0.5
+  },
+  {
+    "Agent": "Piper",
+    "Attribute": "Physical",
+    "Specialty": "Anomaly",
+    "Faction": "Sons of Calydon",
+    "Tier": 1
+  },
+  {
+    "Agent": "Lucy",
+    "Attribute": "Fire",
+    "Specialty": "Support",
+    "Faction": "Sons of Calydon",
+    "Tier": 1
+  },
+  {
+    "Agent": "Corin",
+    "Attribute": "Physical",
+    "Specialty": "Attack",
+    "Faction": "Victoria Housekeeping",
+    "Tier": 2
+  },
+  {
+    "Agent": "Anton",
+    "Attribute": "Electric",
+    "Specialty": "Attack",
+    "Faction": "Belobog Heavy Industries",
+    "Tier": 2
+  },
+  {
+    "Agent": "Ben",
+    "Attribute": "Fire",
+    "Specialty": "Defense",
+    "Faction": "Belobog Heavy Industries",
+    "Tier": 2
+  },
+  {
+    "Agent": "Soukaku",
+    "Attribute": "Ice",
+    "Specialty": "Support",
+    "Faction": "Section 6",
+    "Tier": 0
+  },
+  {
+    "Agent": "Billy",
+    "Attribute": "Physical",
+    "Specialty": "Attack",
+    "Faction": "Cunning Hares",
+    "Tier": 3
+  },
+  {
+    "Agent": "Nicole",
+    "Attribute": "Ether",
+    "Specialty": "Support",
+    "Faction": "Cunning Hares",
+    "Tier": 1
+  },
+  {
+    "Agent": "Anby",
+    "Attribute": "Electric",
+    "Specialty": "Stun",
+    "Faction": "Cunning Hares",
+    "Tier": 1
+  }
+]
