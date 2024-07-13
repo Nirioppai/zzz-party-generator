@@ -6,6 +6,8 @@ import {
   Button,
   Box,
   Chip,
+  Alert,
+  FormHelperText,
 } from '@mui/material';
 
 import characters from '../../assets/characters.json';
@@ -21,28 +23,39 @@ const specialties = [
 ];
 
 function PartyGenerator() {
-  const [partyName, setPartyName] = useState('');
+  const [configurationName, setConfigurationName] = useState('');
   const [selectedAttributes, setSelectedAttributes] = useState([]);
   const [selectedSpecialties, setSelectedSpecialties] = useState([]);
   const [generatedTeams, setGeneratedTeams] = useState([]);
+  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
     console.log('generatedTeams updated:', generatedTeams);
   }, [generatedTeams]);
 
-  const handlePartyNameChange = event => {
-    setPartyName(event.target.value);
+  const handleConfigurationNameChange = event => {
+    setConfigurationName(event.target.value);
   };
 
   const handleAttributeClick = attribute => {
     if (selectedAttributes.length < 3) {
       setSelectedAttributes([...selectedAttributes, attribute]);
+    } else {
+      setAlert({
+        severity: 'warning',
+        message: 'You can only select up to 3 attributes.',
+      });
     }
   };
 
   const handleSpecialtyClick = specialty => {
     if (selectedSpecialties.length < 3) {
       setSelectedSpecialties([...selectedSpecialties, specialty]);
+    } else {
+      setAlert({
+        severity: 'warning',
+        message: 'You can only select up to 3 specialties.',
+      });
     }
   };
 
@@ -50,28 +63,23 @@ function PartyGenerator() {
     setSelectedAttributes([]);
     setSelectedSpecialties([]);
     setGeneratedTeams([]);
+    setAlert(null);
   };
 
-  const generateParty = () => {
+  const generateParty = (attributes, specialties) => {
     let filteredCharacters = characters;
 
     // Filter by attributes
-    if (selectedAttributes.length > 0) {
-      filteredCharacters = filteredCharacters.filter(
-        char =>
-          selectedAttributes.includes('Autofill') ||
-          selectedAttributes.includes(char.Attribute)
-      );
-    }
+    filteredCharacters = filteredCharacters.filter(
+      char =>
+        attributes.includes('Autofill') || attributes.includes(char.Attribute)
+    );
 
     // Filter by specialties
-    if (selectedSpecialties.length > 0) {
-      filteredCharacters = filteredCharacters.filter(
-        char =>
-          selectedSpecialties.includes('Autofill') ||
-          selectedSpecialties.includes(char.Specialty)
-      );
-    }
+    filteredCharacters = filteredCharacters.filter(
+      char =>
+        specialties.includes('Autofill') || specialties.includes(char.Specialty)
+    );
 
     // If we don't have enough characters, return empty array
     if (filteredCharacters.length < 3) {
@@ -147,11 +155,43 @@ function PartyGenerator() {
   };
 
   const handleGenerateParty = () => {
-    const teams = generateParty();
-    setGeneratedTeams(teams);
-    console.log('Generated teams:', teams);
+    let attributesToUse = [...selectedAttributes];
+    let specialtiesToUse = [...selectedSpecialties];
 
-    setPartyName('');
+    // Fill remaining slots with 'Autofill' if less than 3 selections
+
+    while (attributesToUse.length < 3) {
+      attributesToUse.push('Autofill');
+    }
+    while (specialtiesToUse.length < 3) {
+      specialtiesToUse.push('Autofill');
+    }
+
+    const teams = generateParty(attributesToUse, specialtiesToUse);
+
+    if (teams.length === 0) {
+      setAlert({
+        severity: 'error',
+        message:
+          'No teams found with the selected criteria. Try adjusting your selections.',
+      });
+    } else {
+      setGeneratedTeams(teams);
+      console.log('Generated teams:', teams);
+
+      // Create strings for attributes and specialties
+      const attributesString = `Attributes: ${attributesToUse.join(', ')}`;
+      const specialtiesString = `Specialties: ${specialtiesToUse.join(', ')}`;
+
+      setAlert({
+        severity: 'success',
+        message: `Successfully generated ${teams.length} team${
+          teams.length > 1 ? 's' : ''
+        } using the configuration for ${attributesString}, ${specialtiesString}.`,
+      });
+    }
+
+    setConfigurationName('');
     setSelectedAttributes([]);
     setSelectedSpecialties([]);
   };
@@ -161,26 +201,36 @@ function PartyGenerator() {
       <Typography variant='h4' gutterBottom>
         Welcome to New Eridu Party Generator!
       </Typography>
+
       <Box component='form' noValidate autoComplete='off'>
+        <Typography variant='h6'>Configuration Name</Typography>
+        <FormHelperText sx={{ mb: 1 }}>
+          Enter a name for your configuration (optional)
+        </FormHelperText>
         <TextField
           fullWidth
-          label='Party Name'
-          value={partyName}
-          onChange={handlePartyNameChange}
-          margin='normal'
+          label='Configuration Name'
+          value={configurationName}
+          onChange={handleConfigurationNameChange}
           sx={{ mb: 2 }}
         />
-
         <Typography variant='h6' gutterBottom>
           Attributes
         </Typography>
+        <FormHelperText sx={{ mb: 1 }}>
+          Select up to 3 attributes. Use &apos;Autofill&apos; to include any
+          attribute.
+        </FormHelperText>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
           {attributes.map(attribute => (
             <Button
               key={attribute}
               variant='outlined'
               onClick={() => handleAttributeClick(attribute)}
-              disabled={selectedAttributes.length >= 3}
+              disabled={
+                selectedAttributes.length >= 3 &&
+                !selectedAttributes.includes(attribute)
+              }
             >
               {attribute}
             </Button>
@@ -190,13 +240,20 @@ function PartyGenerator() {
         <Typography variant='h6' gutterBottom>
           Specialties
         </Typography>
+        <FormHelperText sx={{ mb: 1 }}>
+          Select up to 3 specialties. Use &apos;Autofill&apos; to include any
+          specialty.
+        </FormHelperText>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
           {specialties.map(specialty => (
             <Button
               key={specialty}
               variant='outlined'
               onClick={() => handleSpecialtyClick(specialty)}
-              disabled={selectedSpecialties.length >= 3}
+              disabled={
+                selectedSpecialties.length >= 3 &&
+                !selectedSpecialties.includes(specialty)
+              }
             >
               {specialty}
             </Button>
@@ -214,6 +271,11 @@ function PartyGenerator() {
                   key={`${attribute}-${index}`}
                   label={attribute}
                   color='primary'
+                  onDelete={() =>
+                    setSelectedAttributes(
+                      selectedAttributes.filter(a => a !== attribute)
+                    )
+                  }
                 />
               ))}
             </Box>
@@ -231,6 +293,11 @@ function PartyGenerator() {
                   key={`${specialty}-${index}`}
                   label={specialty}
                   color='secondary'
+                  onDelete={() =>
+                    setSelectedSpecialties(
+                      selectedSpecialties.filter(s => s !== specialty)
+                    )
+                  }
                 />
               ))}
             </Box>
@@ -250,8 +317,19 @@ function PartyGenerator() {
           </Button>
         </Box>
 
+        {alert && (
+          <Alert
+            severity={alert.severity}
+            variant='filled'
+            onClose={() => setAlert(null)}
+            sx={{ mb: 2, mt: 2 }}
+          >
+            {alert.message}
+          </Alert>
+        )}
+
         {generatedTeams.length > 0 && (
-          <Box sx={{ mt: 4 }}>
+          <Box>
             <Typography variant='h5' gutterBottom>
               Generated Teams:
             </Typography>
