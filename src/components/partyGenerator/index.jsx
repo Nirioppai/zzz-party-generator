@@ -12,7 +12,11 @@ import {
   Chip,
   Alert,
   FormHelperText,
+  Switch,
+  FormControlLabel,
+  Tooltip,
 } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 
 import characters from '../../assets/characters.json';
 
@@ -31,6 +35,7 @@ function PartyGenerator() {
   const [selectedAttributes, setSelectedAttributes] = useState([]);
   const [selectedSpecialties, setSelectedSpecialties] = useState([]);
   const [generatedTeams, setGeneratedTeams] = useState([]);
+  const [strictMode, setStrictMode] = useState(true);
   const [alert, setAlert] = useState(null);
 
   useEffect(() => {
@@ -164,11 +169,13 @@ function PartyGenerator() {
 
     // Fill remaining slots with 'Autofill' if less than 3 selections
 
-    while (attributesToUse.length < 3) {
-      attributesToUse.push('Autofill');
-    }
-    while (specialtiesToUse.length < 3) {
-      specialtiesToUse.push('Autofill');
+    if (!strictMode) {
+      while (attributesToUse.length < 3) {
+        attributesToUse.push('Autofill');
+      }
+      while (specialtiesToUse.length < 3) {
+        specialtiesToUse.push('Autofill');
+      }
     }
 
     const teams = generateParty(attributesToUse, specialtiesToUse);
@@ -218,6 +225,24 @@ function PartyGenerator() {
           onChange={handleConfigurationNameChange}
           sx={{ mb: 2 }}
         />
+        <Tooltip title='Strict Mode: When enabled, only selected attributes and specialties are used. No autofill. Strict Mode is on by default.'>
+          <FormControlLabel
+            sx={{ mb: 2 }}
+            control={
+              <Switch
+                checked={strictMode}
+                onChange={e => setStrictMode(e.target.checked)}
+                name='strictMode'
+              />
+            }
+            label={
+              <Box display='flex' alignItems='center'>
+                Strict Mode
+                <InfoIcon fontSize='small' style={{ marginLeft: 4 }} />
+              </Box>
+            }
+          />
+        </Tooltip>
         <Typography variant='h6' gutterBottom>
           Attributes
         </Typography>
@@ -334,7 +359,7 @@ function PartyGenerator() {
 
         {generatedTeams.length > 0 && (
           <Box>
-            <Typography variant='h5' gutterBottom>
+            <Typography variant='h5' gutterBottom sx={{ mt: 2 }}>
               Generated Teams:
             </Typography>
             {generatedTeams.map((teamData, index) => (
@@ -359,6 +384,11 @@ function PartyGenerator() {
                           height='140'
                           image={char.imgUrl}
                           alt={char.Agent}
+                          sx={{
+                            objectFit: 'cover',
+                            // objectPosition:
+                            //   char.Agent === 'Ben' ? 'center 10%' : 'center',
+                          }}
                         />
                         <CardContent>
                           <Typography variant='body1'>{char.Agent}</Typography>

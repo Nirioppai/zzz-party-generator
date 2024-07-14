@@ -18,16 +18,19 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import { doSignOut } from '../../firebase/auth';
+import { useAuth } from '../../contexts/authContext';
 
 const StyledToolbar = styled(Toolbar)({
   display: 'flex',
   justifyContent: 'space-between',
 });
 
-const NavItems = ['Home', 'Profile', 'Settings', 'Logout'];
+const NavItems = ['Home', 'Logout'];
 
 function Dashboard() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const { userLoggedIn } = useAuth();
+  console.log(userLoggedIn);
   const navigate = useNavigate();
 
   const handleOpenNavMenu = event => {
@@ -39,21 +42,20 @@ function Dashboard() {
   };
 
   const handleNavItemClick = item => {
-    handleCloseNavMenu();
-    if (item === 'Logout') {
-      handleLogout();
-    }
-    // Handle other nav items as needed
-  };
-
-  const handleLogout = async () => {
-    try {
-      await doSignOut();
+    if (item === 'Home') {
+      navigate('/');
+    } else if (item === 'Login') {
       navigate('/login');
-    } catch (error) {
-      console.error('Error logging out:', error);
-      // Optionally, show an error message to the user
+    } else if (item === 'Logout') {
+      doSignOut()
+        .then(() => {
+          navigate('/');
+        })
+        .catch(error => {
+          console.error('Logout error', error);
+        });
     }
+    handleCloseNavMenu();
   };
 
   return (
@@ -100,11 +102,18 @@ function Dashboard() {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                {NavItems.map(item => (
-                  <MenuItem key={item} onClick={() => handleNavItemClick(item)}>
-                    <Typography textAlign='center'>{item}</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={() => handleNavItemClick('Home')}>
+                  <Typography textAlign='center'>Home</Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() =>
+                    handleNavItemClick(userLoggedIn ? 'Logout' : 'Login')
+                  }
+                >
+                  <Typography textAlign='center'>
+                    {userLoggedIn ? 'Logout' : 'Login'}
+                  </Typography>
+                </MenuItem>
               </Menu>
             </Box>
 
@@ -117,15 +126,20 @@ function Dashboard() {
               ZZZ
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {NavItems.map(item => (
-                <Button
-                  key={item}
-                  onClick={() => handleNavItemClick(item)}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {item}
-                </Button>
-              ))}
+              <Button
+                onClick={() => handleNavItemClick('Home')}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Home
+              </Button>
+              <Button
+                onClick={() =>
+                  handleNavItemClick(userLoggedIn ? 'Logout' : 'Login')
+                }
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {userLoggedIn ? 'Logout' : 'Login'}
+              </Button>
             </Box>
           </StyledToolbar>
         </Container>
