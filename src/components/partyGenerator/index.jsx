@@ -5,6 +5,10 @@ import {
   TextField,
   Button,
   Box,
+  Card,
+  Grid,
+  CardMedia,
+  CardContent,
   Chip,
   Alert,
   FormHelperText,
@@ -199,7 +203,7 @@ function PartyGenerator() {
   return (
     <Container>
       <Typography variant='h4' gutterBottom>
-        Welcome to New Eridu Party Generator!
+        Welcome to the New Eridu Party Generator!
       </Typography>
 
       <Box component='form' noValidate autoComplete='off'>
@@ -343,15 +347,32 @@ function PartyGenerator() {
                   borderRadius: '4px',
                 }}
               >
-                <Typography variant='h6'>
+                <Typography variant='h6' gutterBottom>
                   Team {index + 1} (Score: {teamData.score})
                 </Typography>
-                {teamData.team.map((char, charIndex) => (
-                  <Typography key={charIndex} variant='body1'>
-                    {char.Agent} - {char.Attribute} - {char.Specialty} -{' '}
-                    {char.Faction} - Tier {char.Tier}
-                  </Typography>
-                ))}
+                <Grid container spacing={2}>
+                  {teamData.team.map((char, charIndex) => (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={charIndex}>
+                      <Card>
+                        <CardMedia
+                          component='img'
+                          height='140'
+                          image={char.imgUrl}
+                          alt={char.Agent}
+                        />
+                        <CardContent>
+                          <Typography variant='body1'>{char.Agent}</Typography>
+                          <Typography variant='body2' color='text.secondary'>
+                            {char.Attribute} - {char.Specialty}
+                          </Typography>
+                          <Typography variant='body2' color='text.secondary'>
+                            {char.Faction} - Tier {char.Tier}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
               </Box>
             ))}
           </Box>
