@@ -1,4 +1,4 @@
-// src/components/dashboard/index.jsx
+// src/components/Layout/index.jsx
 
 import React from 'react';
 import {
@@ -13,7 +13,6 @@ import {
   MenuItem,
   Button,
 } from '@mui/material';
-import PartyGenerator from '../partyGenerator';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
@@ -25,13 +24,20 @@ const StyledToolbar = styled(Toolbar)({
   justifyContent: 'space-between',
 });
 
-const NavItems = ['Home', 'Logout'];
-
-function Dashboard() {
+function LayoutSkeleton({ children }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const { userLoggedIn } = useAuth();
-  console.log(userLoggedIn);
   const navigate = useNavigate();
+
+  const menuItems = [
+    { label: 'Home', path: '/' },
+    { label: 'Agents', path: '/agents' },
+    {
+      label: userLoggedIn ? 'Logout' : 'Login',
+      path: userLoggedIn ? '/logout' : '/login',
+    },
+    // Add more menu items here as needed
+  ];
 
   const handleOpenNavMenu = event => {
     setAnchorElNav(event.currentTarget);
@@ -41,12 +47,8 @@ function Dashboard() {
     setAnchorElNav(null);
   };
 
-  const handleNavItemClick = item => {
-    if (item === 'Home') {
-      navigate('/');
-    } else if (item === 'Login') {
-      navigate('/login');
-    } else if (item === 'Logout') {
+  const handleNavItemClick = path => {
+    if (path === '/logout') {
       doSignOut()
         .then(() => {
           navigate('/');
@@ -54,6 +56,8 @@ function Dashboard() {
         .catch(error => {
           console.error('Logout error', error);
         });
+    } else {
+      navigate(path);
     }
     handleCloseNavMenu();
   };
@@ -102,18 +106,14 @@ function Dashboard() {
                   display: { xs: 'block', md: 'none' },
                 }}
               >
-                <MenuItem onClick={() => handleNavItemClick('Home')}>
-                  <Typography textAlign='center'>Home</Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() =>
-                    handleNavItemClick(userLoggedIn ? 'Logout' : 'Login')
-                  }
-                >
-                  <Typography textAlign='center'>
-                    {userLoggedIn ? 'Logout' : 'Login'}
-                  </Typography>
-                </MenuItem>
+                {menuItems.map(item => (
+                  <MenuItem
+                    key={item.label}
+                    onClick={() => handleNavItemClick(item.path)}
+                  >
+                    <Typography textAlign='center'>{item.label}</Typography>
+                  </MenuItem>
+                ))}
               </Menu>
             </Box>
 
@@ -126,31 +126,24 @@ function Dashboard() {
               ZZZ
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              <Button
-                onClick={() => handleNavItemClick('Home')}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                Home
-              </Button>
-              <Button
-                onClick={() =>
-                  handleNavItemClick(userLoggedIn ? 'Logout' : 'Login')
-                }
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {userLoggedIn ? 'Logout' : 'Login'}
-              </Button>
+              {menuItems.map(item => (
+                <Button
+                  key={item.label}
+                  onClick={() => handleNavItemClick(item.path)}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {item.label}
+                </Button>
+              ))}
             </Box>
           </StyledToolbar>
         </Container>
       </AppBar>
       <Container component='main' sx={{ mt: 8, mb: 2 }} maxWidth='lg'>
-        <Box sx={{ mt: 4 }}>
-          <PartyGenerator />
-        </Box>
+        <Box sx={{ mt: 4 }}>{children}</Box>
       </Container>
     </>
   );
 }
 
-export default Dashboard;
+export default LayoutSkeleton;

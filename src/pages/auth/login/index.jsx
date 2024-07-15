@@ -27,7 +27,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (userLoggedIn) {
-      window.location.href = '/dashboard'; // Redirect to dashboard if the user is already logged in
+      window.location.href = '/partyGenerator'; // Redirect to partyGenerator if the user is already logged in
     }
   }, [userLoggedIn]);
 
@@ -42,7 +42,7 @@ function LoginPage() {
       setIsSigningIn(true);
       try {
         await doSignInWithWithEmailAndPassword(email, password);
-        window.location.href = '/dashboard'; // Redirect to dashboard after successful login
+        window.location.href = '/partyGenerator'; // Redirect to partyGenerator after successful login
       } catch (error) {
         setIsSigningIn(false);
         setErrorMessage(error.message);
@@ -57,7 +57,7 @@ function LoginPage() {
       setIsSigningIn(true);
       try {
         await doSignInWithGoogle();
-        window.location.href = '/dashboard'; // Redirect to dashboard after successful Google sign-in
+        window.location.href = '/partyGenerator'; // Redirect to partyGenerator after successful Google sign-in
       } catch (error) {
         setIsSigningIn(false);
         setErrorMessage(error.message);
