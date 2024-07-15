@@ -9,6 +9,8 @@ import {
   Typography,
   TextField,
   CardActionArea,
+  Alert,
+  Box,
 } from '@mui/material';
 import charactersData from '../../assets/characters.json';
 import {
@@ -55,14 +57,41 @@ const AgentsPage = () => {
 
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
+      <Alert variant='filled' severity='info' sx={{ mb: 2 }}>
+        Welcome to the Agents Page! Here you can browse and select your team of
+        agents. Use the search bar below to filter agents by their name,
+        attribute, specialty, or faction. Click on an agent's card to add them
+        to your collection or remove them.
+      </Alert>
+
       <TextField
         fullWidth
         variant='outlined'
         placeholder='Search agents...'
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
-        sx={{ mb: 4 }}
+        sx={{ mb: 2 }}
       />
+
+      <Typography variant='body2' color='text.secondary' sx={{ mb: 2 }}>
+        Selected agents will appear in full color, while unselected agents are
+        greyed out.
+      </Typography>
+
+      <Box sx={{ mb: 2, mt: 2 }}>
+        <Typography variant='body1'>
+          Your collection - {myAgents.length} agent
+          {myAgents.length > 1 ? <>(s)</> : <></>} selected:
+        </Typography>
+        <Alert
+          variant='filled'
+          severity={myAgents.length <= 0 ? 'warning' : 'success'}
+          sx={{ mb: 2 }}
+        >
+          {myAgents.join(', ') || 'No agents selected yet.'}
+        </Alert>
+      </Box>
+
       <Grid container spacing={4}>
         {filteredCharacters.map(char => (
           <Grid item key={char.Agent} xs={12} sm={6} md={3}>
@@ -97,6 +126,13 @@ const AgentsPage = () => {
           </Grid>
         ))}
       </Grid>
+
+      {filteredCharacters.length === 0 && (
+        <Alert variant='filled' severity='error' sx={{ mt: 2 }}>
+          No agents found matching your search criteria. Try adjusting your
+          search terms.
+        </Alert>
+      )}
     </Container>
   );
 };

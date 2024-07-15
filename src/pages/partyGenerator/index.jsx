@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import {
   Container,
   Typography,
@@ -19,6 +20,7 @@ import {
 import InfoIcon from '@mui/icons-material/Info';
 
 import characters from '../../assets/characters.json';
+import { myAgentsState } from '../../atoms/atoms';
 
 const attributes = ['Fire', 'Electric', 'Ice', 'Physical', 'Ether', 'Autofill'];
 const specialties = [
@@ -37,10 +39,13 @@ function PartyGenerator() {
   const [generatedTeams, setGeneratedTeams] = useState([]);
   const [strictMode, setStrictMode] = useState(true);
   const [alert, setAlert] = useState(null);
+  const [useCollection, setUseCollection] = useState(false);
+  const myAgents = useRecoilValue(myAgentsState);
 
   useEffect(() => {
-    console.log('generatedTeams updated:', generatedTeams);
-  }, [generatedTeams]);
+    console.log('Generated teams: ', generatedTeams);
+    console.log('Agents in Collection: ', myAgents);
+  }, [generatedTeams, myAgents]);
 
   const handleConfigurationNameChange = event => {
     setConfigurationName(event.target.value);
@@ -75,8 +80,21 @@ function PartyGenerator() {
     setAlert(null);
   };
 
+  const getCharacterData = characterName => {
+    return characters.find(char => char.Agent === characterName) || {};
+  };
+
   const generateParty = (attributes, specialties) => {
-    let filteredCharacters = characters;
+    let filteredCharacters;
+
+    if (useCollection) {
+      filteredCharacters = myAgents.map(agentName => {
+        const charData = getCharacterData(agentName);
+        return { ...charData, Agent: agentName };
+      });
+    } else {
+      filteredCharacters = characters;
+    }
 
     // Filter by attributes
     filteredCharacters = filteredCharacters.filter(
@@ -109,7 +127,6 @@ function PartyGenerator() {
       scoredCombinations.sort((a, b) => b.score - a.score)
     );
 
-    console.log('Unique teams generated:', uniqueTeams);
     return uniqueTeams;
   };
 
@@ -168,7 +185,6 @@ function PartyGenerator() {
     let specialtiesToUse = [...selectedSpecialties];
 
     // Fill remaining slots with 'Autofill' if less than 3 selections
-
     if (!strictMode) {
       while (attributesToUse.length < 3) {
         attributesToUse.push('Autofill');
@@ -188,7 +204,6 @@ function PartyGenerator() {
       });
     } else {
       setGeneratedTeams(teams);
-      console.log('Generated teams:', teams);
 
       // Create strings for attributes and specialties
       const attributesString = `Attributes: ${attributesToUse.join(', ')}`;
@@ -202,9 +217,9 @@ function PartyGenerator() {
       });
     }
 
-    setConfigurationName('');
-    setSelectedAttributes([]);
-    setSelectedSpecialties([]);
+    // setConfigurationName('');
+    // setSelectedAttributes([]);
+    // setSelectedSpecialties([]);
   };
 
   return (
@@ -333,6 +348,17 @@ function PartyGenerator() {
           </Box>
         )}
 
+        <FormControlLabel
+          control={
+            <Switch
+              checked={useCollection}
+              onChange={e => setUseCollection(e.target.checked)}
+              name='useCollection'
+            />
+          }
+          label='Select characters from collection'
+        />
+
         <Box sx={{ mt: 2 }}>
           <Button variant='outlined' onClick={resetOptions} sx={{ mr: 2 }}>
             Reset Options
@@ -386,8 +412,6 @@ function PartyGenerator() {
                           alt={char.Agent}
                           sx={{
                             objectFit: 'cover',
-                            // objectPosition:
-                            //   char.Agent === 'Ben' ? 'center 10%' : 'center',
                           }}
                         />
                         <CardContent>
