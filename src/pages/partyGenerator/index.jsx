@@ -348,16 +348,24 @@ function PartyGenerator() {
           </Box>
         )}
 
-        <FormControlLabel
-          control={
-            <Switch
-              checked={useCollection}
-              onChange={e => setUseCollection(e.target.checked)}
-              name='useCollection'
-            />
-          }
-          label='Select characters from collection'
-        />
+        <Tooltip title='When enabled, generated parties will only consist of agents in your collection. Toggle off to view parties from all agents. You can add agents to your collection on the Agents page.'>
+          <FormControlLabel
+            sx={{ mb: 2 }}
+            control={
+              <Switch
+                checked={useCollection}
+                onChange={e => setUseCollection(e.target.checked)}
+                name='useCollection'
+              />
+            }
+            label={
+              <Box display='flex' alignItems='center'>
+                Select characters from collection
+                <InfoIcon fontSize='small' style={{ marginLeft: 4 }} />
+              </Box>
+            }
+          />
+        </Tooltip>
 
         <Box sx={{ mt: 2 }}>
           <Button variant='outlined' onClick={resetOptions} sx={{ mr: 2 }}>
