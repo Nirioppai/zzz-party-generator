@@ -15,3 +15,18 @@ export const myAgentsState = atom({
   key: 'myAgentsState',
   default: [],
 });
+
+export const teamsState = atom({
+  key: 'teamsState',
+  default: [],
+});
+
+export const currentTeamState = atom({
+  key: 'currentTeamState',
+  default: [],
+});
+
+export const numberOfTeamsState = atom({
+  key: 'numberOfTeamsState',
+  default: 1,
+});

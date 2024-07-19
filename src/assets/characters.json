@@ -5,7 +5,9 @@
     "Specialty": "Attack",
     "Faction": "Victoria Housekeeping",
     "Tier": 0,
-    "imgUrl": "https://img.game8.co/3924005/a28c4b5e622c7f11b5acbb83cc05dfa1.png/show"
+    "imgUrl": "https://img.game8.co/3924005/a28c4b5e622c7f11b5acbb83cc05dfa1.png/show",
+    "fourPieceDriveDisk": "Polar Metal",
+    "twoPieceDriveDisk": "Woodpecker Electro"
   },
   {
     "Agent": "Grace",
@@ -13,7 +15,9 @@
     "Specialty": "Anomaly",
     "Faction": "Belobog Heavy Industries",
     "Tier": 0.5,
-    "imgUrl": "https://img.game8.co/3924003/112a303ede260f70d16464cc3b1eb5ca.png/show"
+    "imgUrl": "https://img.game8.co/3924003/112a303ede260f70d16464cc3b1eb5ca.png/show",
+    "fourPieceDriveDisk": "Freedom Blues",
+    "twoPieceDriveDisk": "Swing Jazz"
   },
   {
     "Agent": "Soldier 11",
@@ -21,7 +25,9 @@
     "Specialty": "Attack",
     "Faction": "Obol Squad",
     "Tier": 1,
-    "imgUrl": "https://img.game8.co/3924011/c14ae22115e44c275520b9141455a80c.png/show"
+    "imgUrl": "https://img.game8.co/3924011/c14ae22115e44c275520b9141455a80c.png/show",
+    "fourPieceDriveDisk": "Inferno Metal",
+    "twoPieceDriveDisk": "Swing Jazz"
   },
   {
     "Agent": "Nekomata",
@@ -29,7 +35,9 @@
     "Specialty": "Attack",
     "Faction": "Cunning Hares",
     "Tier": 1,
-    "imgUrl": "https://img.game8.co/3924000/f9b62d0301948b834fd55cd6b92b161d.png/show"
+    "imgUrl": "https://img.game8.co/3924000/f9b62d0301948b834fd55cd6b92b161d.png/show",
+    "fourPieceDriveDisk": "Woodpecker Electro",
+    "twoPieceDriveDisk": "Fanged Metal"
   },
   {
     "Agent": "Lycaon",
@@ -37,7 +45,9 @@
     "Specialty": "Stun",
     "Faction": "Victoria Housekeeping",
     "Tier": 0,
-    "imgUrl": "https://img.game8.co/3924007/3e47c0f4df8528482d214be586a0836e.png/show"
+    "imgUrl": "https://img.game8.co/3924007/3e47c0f4df8528482d214be586a0836e.png/show",
+    "fourPieceDriveDisk": "Shockstar Disco",
+    "twoPieceDriveDisk": "Swing Jazz"
   },
   {
     "Agent": "Koleda",
@@ -45,7 +55,9 @@
     "Specialty": "Stun",
     "Faction": "Belobog Heavy Industries",
     "Tier": 1,
-    "imgUrl": "https://img.game8.co/3923997/439f6f5b82caba6f99a91aab3270d63d.png/show"
+    "imgUrl": "https://img.game8.co/3923997/439f6f5b82caba6f99a91aab3270d63d.png/show",
+    "fourPieceDriveDisk": "Shockstar Disco",
+    "twoPieceDriveDisk": "Swing Jazz"
   },
   {
     "Agent": "Rina",
@@ -53,7 +65,9 @@
     "Specialty": "Support",
     "Faction": "Victoria Housekeeping",
     "Tier": 0.5,
-    "imgUrl": "https://img.game8.co/3924002/ead27c7a32143e09826330a7f5290eb2.png/show"
+    "imgUrl": "https://img.game8.co/3924002/ead27c7a32143e09826330a7f5290eb2.png/show",
+    "fourPieceDriveDisk": "Freedom Blues",
+    "twoPieceDriveDisk": "Swing Jazz"
   },
   {
     "Agent": "Piper",
@@ -61,7 +75,9 @@
     "Specialty": "Anomaly",
     "Faction": "Sons of Calydon",
     "Tier": 1,
-    "imgUrl": "https://img.game8.co/3924012/cf1eecefb5e91ca60f2c9bec5fcda53f.png/show"
+    "imgUrl": "https://img.game8.co/3924012/cf1eecefb5e91ca60f2c9bec5fcda53f.png/show",
+    "fourPieceDriveDisk": "Freedom Blues",
+    "twoPieceDriveDisk": "Swing Jazz"
   },
   {
     "Agent": "Lucy",
@@ -69,7 +85,9 @@
     "Specialty": "Support",
     "Faction": "Sons of Calydon",
     "Tier": 1,
-    "imgUrl": "https://img.game8.co/3924006/121cb049558c2fddc6da0f7c1cd7e746.png/show"
+    "imgUrl": "https://img.game8.co/3924006/121cb049558c2fddc6da0f7c1cd7e746.png/show",
+    "fourPieceDriveDisk": "Swing Jazz",
+    "twoPieceDriveDisk": "Hormone Punk"
   },
   {
     "Agent": "Corin",
@@ -77,7 +95,9 @@
     "Specialty": "Attack",
     "Faction": "Victoria Housekeeping",
     "Tier": 2,
-    "imgUrl": "https://img.game8.co/3923995/51d070560be0aa686c1f637e9ea4f526.png/show"
+    "imgUrl": "https://img.game8.co/3923995/51d070560be0aa686c1f637e9ea4f526.png/show",
+    "fourPieceDriveDisk": "Fanged Metal",
+    "twoPieceDriveDisk": "Woodpecker Electro"
   },
   {
     "Agent": "Anton",
@@ -85,7 +105,9 @@
     "Specialty": "Attack",
     "Faction": "Belobog Heavy Industries",
     "Tier": 2,
-    "imgUrl": "https://img.game8.co/3923999/207ec3d48ccaa4b6c1bcc3f86fa9da28.png/show"
+    "imgUrl": "https://img.game8.co/3923999/207ec3d48ccaa4b6c1bcc3f86fa9da28.png/show",
+    "fourPieceDriveDisk": "Thunder Metal",
+    "twoPieceDriveDisk": "Swing Jazz"
   },
   {
     "Agent": "Ben",
@@ -93,7 +115,9 @@
     "Specialty": "Defense",
     "Faction": "Belobog Heavy Industries",
     "Tier": 2,
-    "imgUrl": "https://img.game8.co/3924010/0d8d7008a5deffce8aeb77ce8631eff6.png/show"
+    "imgUrl": "https://img.game8.co/3924010/0d8d7008a5deffce8aeb77ce8631eff6.png/show",
+    "fourPieceDriveDisk": "Swing Jazz",
+    "twoPieceDriveDisk": "Soul Rock"
   },
   {
     "Agent": "Soukaku",
@@ -101,7 +125,9 @@
     "Specialty": "Support",
     "Faction": "Section 6",
     "Tier": 0,
-    "imgUrl": "https://img.game8.co/3924008/88a8ba60bb56346c356f8ebf6815d4b3.png/show"
+    "imgUrl": "https://img.game8.co/3924008/88a8ba60bb56346c356f8ebf6815d4b3.png/show",
+    "fourPieceDriveDisk": "Swing Jazz",
+    "twoPieceDriveDisk": "Hormone Punk"
   },
   {
     "Agent": "Billy",
@@ -109,7 +135,9 @@
     "Specialty": "Attack",
     "Faction": "Cunning Hares",
     "Tier": 3,
-    "imgUrl": "https://img.game8.co/3923998/0428802054152e251460f10bc94d4389.png/show"
+    "imgUrl": "https://img.game8.co/3923998/0428802054152e251460f10bc94d4389.png/show",
+    "fourPieceDriveDisk": "Puffer Electro",
+    "twoPieceDriveDisk": "Woodpecker Electro"
   },
   {
     "Agent": "Nicole",
@@ -117,7 +145,9 @@
     "Specialty": "Support",
     "Faction": "Cunning Hares",
     "Tier": 1,
-    "imgUrl": "https://img.game8.co/3924001/6037584f79e763106f549329c49694ac.png/show"
+    "imgUrl": "https://img.game8.co/3924001/6037584f79e763106f549329c49694ac.png/show",
+    "fourPieceDriveDisk": "Swing Jazz",
+    "twoPieceDriveDisk": "Chaotic Metal"
   },
   {
     "Agent": "Anby",
@@ -125,6 +155,8 @@
     "Specialty": "Stun",
     "Faction": "Cunning Hares",
     "Tier": 1,
-    "imgUrl": "https://img.game8.co/3924009/e033bf15c11f0cb6bc13841f042eedf3.png/show"
+    "imgUrl": "https://img.game8.co/3924009/e033bf15c11f0cb6bc13841f042eedf3.png/show",
+    "fourPieceDriveDisk": "Shockstar Disco",
+    "twoPieceDriveDisk": "Swing Jazz"
   }
 ]

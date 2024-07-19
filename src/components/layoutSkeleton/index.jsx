@@ -32,6 +32,7 @@ function LayoutSkeleton({ children }) {
   const menuItems = [
     { label: 'Home', path: '/' },
     { label: 'Agents', path: '/agents' },
+    { label: 'Team Drive Disks', path: '/drivedisks' },
     {
       label: userLoggedIn ? 'Logout' : 'Login',
       path: userLoggedIn ? '/logout' : '/login',

@@ -11,6 +11,7 @@ import { AuthProvider } from './contexts/authContext';
 import LayoutSkeleton from './components/layoutSkeleton';
 import PartyGenerator from './pages/partyGenerator';
 import AgentsPage from './pages/agents';
+import DriveDisksPage from './pages/driveDisks';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
                 <Routes>
                   <Route path='/' element={<PartyGenerator />} />
                   <Route path='/agents' element={<AgentsPage />} />
+                  <Route path='/drivedisks' element={<DriveDisksPage />} />
                   <Route path='/partyGenerator' element={<PartyGenerator />} />
                   {/* Add other routes that should be within LayoutSkeleton here */}
                 </Routes>
