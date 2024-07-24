@@ -1,5 +1,15 @@
 [
   {
+    "Agent": "Zhu Yuan",
+    "Attribute": "Ether",
+    "Specialty": "Attack",
+    "Faction": "Criminal Investigation Special Response Team",
+    "Tier": 0,
+    "imgUrl": "https://img.game8.co/3923996/67a6304640717fb19b3f44ce416e56d0.png/show",
+    "fourPieceDriveDisk": "Chaotic Metal",
+    "twoPieceDriveDisk": "Woodpecker Electro"
+  },
+  {
     "Agent": "Ellen",
     "Attribute": "Ice",
     "Specialty": "Attack",
@@ -54,7 +64,7 @@
     "Attribute": "Fire",
     "Specialty": "Stun",
     "Faction": "Belobog Heavy Industries",
-    "Tier": 1,
+    "Tier": 0.5,
     "imgUrl": "https://img.game8.co/3923997/439f6f5b82caba6f99a91aab3270d63d.png/show",
     "fourPieceDriveDisk": "Shockstar Disco",
     "twoPieceDriveDisk": "Swing Jazz"
